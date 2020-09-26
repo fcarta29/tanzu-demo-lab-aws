@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+    environment {
+        GIT_HUB_CREDS = credentials('github')
+    }
+    parameters {
+        string(name: 'payload', defaultValue: 'empty payload', description: '')
+        string(name: 'DOCKER_TRIGGER_REPO_NAME', defaultValue: 'empty repo name', description: '')
+        string(name: 'DOCKER_TRIGGER_DOCKER_HUB_HOST', defaultValue: 'empty hub host name', description: '')
+    }
+    stages {
+        stage('Build') {
+            steps {
+                deleteDir()
+                sh """
+                echo 'Update Deployment for $env.BUILD_TAG'
+                git clone https://github.com/fcarta29/tanzu-demo-lab-aws.git
+                
+                cd tanzu-demo-lab-aws/deploy/examples/spring-petclinic                    
+                ytt -f templates/kustomization.yaml -f templates/values.yaml -v buildTag='$env.BUILD_TAG' --output-files .
+
+                git config --global user.name "Frank Carta"
+                git config --global user.email "fcarta@vmare.com"
+                git commit -am 'Bumped buildTag to $env.BUILD_TAG'
+                git push  https://$GIT_HUB_CREDS_USR:$GIT_HUB_CREDS_PSW@github.com/fcarta29/tanzu-demo-lab-aws.git 
+                """
+            }
+        }
+    }
+}

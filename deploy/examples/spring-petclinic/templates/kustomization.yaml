@@ -1,0 +1,8 @@
+#@ load("@ytt:data", "data")
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonAnnotations:
+  buildTag: #@ data.values.buildTag
+resources:
+- spring-petclinic-deployment.yaml

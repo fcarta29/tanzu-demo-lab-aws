@@ -1,0 +1,15 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  labels:
+    app: jenkins
+  name: jenkins-http-proxy
+  namespace: jenkins
+spec:
+  routes:
+  - match: /
+    services:
+    - name: jenkins
+      port: 8080
+  virtualhost:
+    fqdn: jenkins.tanzudemo.mytiles.me

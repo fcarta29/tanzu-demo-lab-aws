@@ -1,0 +1,50 @@
+# Service Account for Spring Pet Clinic
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: spring-petclinic-service-account
+  namespace: spring-petclinic
+secrets:
+- name: demo-docker-credentials
+- name: demo-git-credentials
+imagePullSecrets:
+- name: demo-docker-credentials
+---
+# Creates Spring Pet Clinic applicaiton builder 
+apiVersion: kpack.io/v1alpha1
+kind: Builder
+metadata:
+  name: spring-petclinic-builder
+  namespace: spring-petclinic
+spec:
+  serviceAccount: spring-petclinic-service-account
+  tag:  index.docker.io/fcarta29/spring-petclinic-builder
+  stack:
+    name: default-cluster-stack
+    kind: ClusterStack
+  store:
+    name: default-cluster-store
+    kind: ClusterStore
+  order:
+  - group:
+    - id: paketo-buildpacks/java
+  - group:
+    - id: paketo-buildpacks/nodejs
+---
+# Creates Spring Pet Clinic image to be built
+apiVersion: kpack.io/v1alpha1
+kind: Image
+metadata:
+  name: spring-petclinic-image
+  namespace: spring-petclinic
+spec:
+  tag:  index.docker.io/fcarta29/spring-petclinic
+  serviceAccount: spring-petclinic-service-account
+  builder:
+    name: spring-petclinic-builder
+    kind: Builder
+  source:
+    git:
+      url: https://github.com/fcarta29/tanzu-demo-lab-aws-examples.git
+      revision: master
+    subPath: "spring-petclinic"

@@ -1,23 +1,29 @@
 build:
 	TAG=`git rev-parse --short=8 HEAD`; \
-	docker build --rm -f deploy-vcenter-event-broker.dockerfile -t fcarta29/deploy-vcenter-event-broker:$$TAG .; \
-	docker tag fcarta29/deploy-vcenter-event-broker:$$TAG fcarta29/deploy-vcenter-event-broker:latest
+	docker build --rm -f build-tanzu-demo-lab-aws.dockerfile -t fcarta29/build-tanzu-demo-lab-aws:$$TAG .; \
+	docker tag fcarta29/build-tanzu-demo-lab-aws:$$TAG fcarta29/build-tanzu-demo-lab-aws:latest
 
 clean:
-	docker stop deploy-vcenter-event-broker
-	docker rm deploy-vcenter-event-broker
+	docker stop build-tanzu-demo-lab-aws
+	docker rm build-tanzu-demo-lab-aws
 
 rebuild: clean build
 
-push:
-	TAG=`git rev-parse --short=8 HEAD`; \
-	docker push fcarta29/deploy-vcenter-event-broker:$$TAG; \
-	docker push fcarta29/deploy-vcenter-event-broker:latest
-
 run:
-	docker run --name deploy-vcenter-event-broker -td fcarta29/deploy-vcenter-event-broker:latest
-	docker exec -it deploy-vcenter-event-broker bash -l
+# Re-enable this when adding jupyter notebooks back in
+	docker run --name build-tanzu-demo-lab-aws -td fcarta29/build-tanzu-demo-lab-aws:latest
+	docker exec -it build-tanzu-demo-lab-aws bash -l
+
+#run-jupyter:
+# Re-enable this when adding jupyter notebooks back in
+#	docker run -p 8888:8888 --name build-tanzu-demo-lab-aws -td fcarta29/build-tanzu-demo-lab-aws:latest
+#	docker exec -it build-tanzu-demo-lab-aws bash -l
+
 join:
-	docker exec -it deploy-vcenter-event-broker bash -l
+	docker exec -it build-tanzu-demo-lab-aws bash -l
+start:
+	docker start build-tanzu-demo-lab-aws
+stop:
+	docker stop build-tanzu-demo-lab-aws
 
 default: build
