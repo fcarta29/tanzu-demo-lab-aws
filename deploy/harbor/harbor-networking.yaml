@@ -1,0 +1,15 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  labels:
+    app: harbor
+  name: harbor-http-proxy
+  namespace: harbor
+spec:
+  routes:
+  - match: /
+    services:
+    - name: harbor-harbor-core
+      port: 80
+  virtualhost:
+    fqdn: harbor.tanzudemo.mytiles.me

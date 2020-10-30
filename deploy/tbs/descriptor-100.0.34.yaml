@@ -1,0 +1,87 @@
+apiVersion: kp.kpack.io/v1alpha1
+kind: DependencyDescriptor
+defaultClusterBuilder: full
+defaultStack: full
+stores:
+- name: default
+  sources:
+  - image: registry.pivotal.io/tanzu-go-buildpack/go@sha256:8b0664b7644a2dca2cd7dd318f356eec4738bbe2ded20b18730d262504f22acd
+  - image: registry.pivotal.io/tanzu-java-buildpack/java@sha256:c7276b13060cbe6c44afda263d3efd3e1ed8caa7a204f44610704d9c598f2de5
+  - image: registry.pivotal.io/tanzu-nodejs-buildpack/nodejs@sha256:2abccc9d5f2af99906c0e0361cc946a17f5a20c19c5b2777fd2da054ffe8fe57
+  - image: registry.pivotal.io/tanzu-java-native-image-buildpack/java-native-image@sha256:bb2e4785b4410b4213f85339352900387806b2870c19d9742f233df2f461bf94
+  - image: registry.pivotal.io/tbs-dependencies/tanzu-buildpacks_dotnet-core@sha256:3c6890aacab5fd78b054c7090fbfc7acd7d16dae3e330e7f0325524554af8084
+  - image: registry.pivotal.io/tbs-dependencies/tanzu-buildpacks_php@sha256:7af56f344798284732ddc33a1d5d6973d1635d3f0e9b8d960e027b08ab3894ad
+  - image: registry.pivotal.io/tbs-dependencies/tanzu-buildpacks_nginx@sha256:e0363a5e6ce01f0935df65d6f89994a91bee63c2f25249c62a84788f53eb4346
+  - image: registry.pivotal.io/tbs-dependencies/tanzu-buildpacks_httpd@sha256:892c824d98afb32198cd5b303098eee5be2600f076455bd8f7da3a34adf2c340
+  - image: registry.pivotal.io/tbs-dependencies/paketo-buildpacks_procfile@sha256:861d9c93924dd1db3fbe6663754da603398931cdc4dee3da5c057ffa65cb383d
+stacks:
+- name: tiny
+  buildImage:
+    image: registry.pivotal.io/tbs-dependencies/build-tiny@sha256:0ca0686ee42675fbba21848b49d9c2e938bb7bd5fc7ec562850a50ce07d25691
+  runImage:
+    image: registry.pivotal.io/tbs-dependencies/run-tiny@sha256:19b5a165152ef30edd66ed4eb0e4abff454319f0e323d60f7ab28f457c8772b4
+- name: base
+  buildImage:
+    image: registry.pivotal.io/tbs-dependencies/build-base@sha256:f550ab24b72586cb26215817b874b9e9ec2ca615ede03206833286934779ab5d
+  runImage:
+    image: registry.pivotal.io/tbs-dependencies/run-base@sha256:21c1fb65033ae5a765a1fb44bfefdea37024ceac86ac6098202b891d27b8671f
+- name: full
+  buildImage:
+    image: registry.pivotal.io/tbs-dependencies/build-full@sha256:faf4785835e4d13da1b17bae3b66da576fbd40c9a681419af9e83c968f8af3d1
+  runImage:
+    image: registry.pivotal.io/tbs-dependencies/run-full@sha256:b4f8ff75188bb4d330ad26711b7fcfc600c798407b788046a2e4afa1580609b0
+clusterBuilders:
+- name: base
+  stack: base
+  store: default
+  order:
+  - group:
+    - id: tanzu-buildpacks/dotnet-core
+  - group:
+    - id: tanzu-buildpacks/nodejs
+  - group:
+    - id: tanzu-buildpacks/go
+  - group:
+    - id: tanzu-buildpacks/php
+  - group:
+    - id: tanzu-buildpacks/nginx
+  - group:
+    - id: tanzu-buildpacks/httpd
+  - group:
+    - id: tanzu-buildpacks/java-native-image
+  - group:
+    - id: tanzu-buildpacks/java
+  - group:
+    - id: paketo-buildpacks/procfile
+- name: full
+  stack: full
+  store: default
+  order:
+  - group:
+    - id: tanzu-buildpacks/dotnet-core
+  - group:
+    - id: tanzu-buildpacks/nodejs
+  - group:
+    - id: tanzu-buildpacks/go
+  - group:
+    - id: tanzu-buildpacks/php
+  - group:
+    - id: tanzu-buildpacks/nginx
+  - group:
+    - id: tanzu-buildpacks/httpd
+  - group:
+    - id: tanzu-buildpacks/java-native-image
+  - group:
+    - id: tanzu-buildpacks/java
+  - group:
+    - id: paketo-buildpacks/procfile
+- name: tiny
+  stack: tiny
+  store: default
+  order:
+  - group:
+    - id: tanzu-buildpacks/go
+  - group:
+    - id: tanzu-buildpacks/java-native-image
+  - group:
+    - id: paketo-buildpacks/procfile

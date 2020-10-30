@@ -3,12 +3,14 @@ LABEL maintainer="Frank Carta <fcarta@vmware.com>"
 
 ENV KUBECTL_VERSION=v1.18.0
 ENV ARGOCD_CLI_VERSION=v1.7.7
-ENV KPACK_VERSION=0.1.2
+ENV KPACK_VERSION=0.1.3
+ENV TBS_VERSION=1.0.3
+ENV TBS_DESCRIPTOR_VERSION=100.0.34
 
 # Install System libraries
 RUN echo "Installing System Libraries" \
   && apt-get update \
-  && apt-get install -y build-essential python3.6 python3-pip python3-dev bash-completion git curl unzip wget findutils jq vim
+  && apt-get install -y build-essential python3.6 python3-pip python3-dev bash-completion git curl unzip wget findutils jq vim tree docker.io
 
 # Copy install yamls
 RUN echo "Clone example application repo and copy deploment yaml files" \
@@ -50,6 +52,10 @@ RUN echo "Installing Helm3" \
   && chmod +x /usr/local/bin/helm \
   && helm version
 
+#Install Tanzu Build Service
+COPY /deploy/tbs/build-service-${TBS_VERSION}.tar /tmp
+COPY /deploy/tbs/descriptor-${TBS_DESCRIPTOR_VERSION}.yaml /tmp
+
 # Get kpack install yaml install and log utility
 RUN echo "Getting kpack installation yaml and installing kpack log utility" \
   && curl -sSL -o /deploy/kpack/release-${KPACK_VERSION}.yaml https://github.com/pivotal/kpack/releases/download/v${KPACK_VERSION}/release-${KPACK_VERSION}.yaml \
@@ -58,10 +64,17 @@ RUN echo "Getting kpack installation yaml and installing kpack log utility" \
   && mv logs /usr/local/bin/logs \
   && chmod +x /usr/local/bin/logs
 
+# Install KPACK CLI
+COPY bin/kp-linux-${KPACK_VERSION} .
+RUN echo "Installing kpack CLI" \
+  && chmod +x kp-linux-${KPACK_VERSION} \
+  && mv kp-linux-${KPACK_VERSION} /usr/local/bin/kp \
+  && which kp \
+  && kp version
+
 # Install Carvel tools
 RUN echo "Installing K14s Carvel tools" \
-  && wget -O- https://k14s.io/install.sh | bash \
-  && ytt version
+  && wget -O- https://k14s.io/install.sh | bash 
 
 # Install Jupyter - TODO[fcarta] make requirements.txt instead of using empty file
 RUN echo "Installing Jupyter" \
