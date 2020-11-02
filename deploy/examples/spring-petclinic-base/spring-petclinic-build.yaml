@@ -41,7 +41,7 @@ spec:
   tag:  harbor.tanzudemo.mytiles.me/library/examples/spring-petclinic
   serviceAccount: spring-petclinic-service-account
   builder:
-    name: full
+    name: spring-petclinic-builder
     kind: Builder
   source:
     git:
