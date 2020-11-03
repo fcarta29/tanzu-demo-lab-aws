@@ -1,9 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 commonAnnotations:
-  buildTag: jenkins-spring-petclinic-release-62
+  buildTag: jenkins-spring-petclinic-release-63
 images:
 - name: spring-petclinic
-  digest: sha256:69824ce863e5b4dd8fac57acf2e3e36018e69e4349749fb483aa5ec8f8660054
+  digest: sha256:57ab5126ad6a787b8ecb66128bf0b9a5cb4f4f79471957a688fd579832e99e46
 resources:
 - spring-petclinic-deployment.yaml
