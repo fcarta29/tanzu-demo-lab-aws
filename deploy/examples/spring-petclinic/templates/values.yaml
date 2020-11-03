@@ -1,3 +1,4 @@
 #@data/values
 ---
 buildTag: "build1"
+digest: "digest1"
