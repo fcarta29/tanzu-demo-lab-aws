@@ -1,12 +1,10 @@
-#@ load("@ytt:data", "data")
-
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: spring-petclinic
 resources:
   - ../../base
 commonAnnotations:
-  buildTag: #@ data.values.buildTag
+  buildTag: buildTag1
 images:
 - name: harbor.tanzudemo.mytiles.me/library/examples/spring-petclinic
-  digest: #@ data.values.digest
+  digest: buildDigest1

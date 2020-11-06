@@ -16,7 +16,7 @@ pipeline {
                 git clone https://github.com/fcarta29/tanzu-demo-lab-aws.git
                 
                 cd tanzu-demo-lab-aws/deploy/examples/spring-petclinic                    
-                ytt -f templates/kustomization.yaml -f templates/values.yaml -v buildTag='$env.BUILD_TAG' -v digest='$digest' --output-files .
+                ytt -f templates/kustomization.yaml -f templates/values.yaml -v buildTag='$env.BUILD_TAG' -v digest='$digest' --output-files overlays/demo/.
 
                 git config --global user.name "Frank Carta"
                 git config --global user.email "fcarta@vmare.com"

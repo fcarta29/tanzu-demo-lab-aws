@@ -35,6 +35,12 @@ RUN echo "Installing Kubectl" \
   && kubectl completion bash > /etc/bash_completion.d/kubectl \
   && kubectl version --short --client
 
+#Install Kustomize
+RUN echo "Installing Kustomize" \
+  && curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash \
+  && mv kustomize /usr/local/bin/kustomize \
+  && kustomize version
+
 # Install ArgoCD CLI
 # ARGOCD_CLI_VERSION=$(curl --silent "https://api.github.com/repos/argoproj/argo-cd/releases/latest" | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
 RUN echo "ArgoCD CLI" \
@@ -57,8 +63,9 @@ COPY /deploy/tbs/build-service-${TBS_VERSION}.tar /tmp
 COPY /deploy/tbs/descriptor-${TBS_DESCRIPTOR_VERSION}.yaml /tmp
 
 # Get kpack install yaml install and log utility
-RUN echo "Getting kpack installation yaml and installing kpack log utility" \
-  && curl -sSL -o /deploy/kpack/release-${KPACK_VERSION}.yaml https://github.com/pivotal/kpack/releases/download/v${KPACK_VERSION}/release-${KPACK_VERSION}.yaml \
+# RUN echo "Getting kpack installation yaml and installing kpack log utility" \
+RUN echo "Installing kpack log utility" \
+#  && curl -sSL -o /deploy/kpack/release-${KPACK_VERSION}.yaml https://github.com/pivotal/kpack/releases/download/v${KPACK_VERSION}/release-${KPACK_VERSION}.yaml \
   && curl -sSL -o /deploy/kpack/logs-v${KPACK_VERSION}-linux.tgz https://github.com/pivotal/kpack/releases/download/v${KPACK_VERSION}/logs-v${KPACK_VERSION}-linux.tgz \
   && tar -zxvf /deploy/kpack/logs-v${KPACK_VERSION}-linux.tgz \
   && mv logs /usr/local/bin/logs \
@@ -77,9 +84,9 @@ RUN echo "Installing K14s Carvel tools" \
   && wget -O- https://k14s.io/install.sh | bash 
 
 # Install Jupyter - TODO[fcarta] make requirements.txt instead of using empty file
-RUN echo "Installing Jupyter" \
-  && pip3 install -r /deploy/jupyter/requirements.txt \
-  && pip3 install jupyter
+#RUN echo "Installing Jupyter" \
+#  && pip3 install -r /deploy/jupyter/requirements.txt \
+#  && pip3 install jupyter
 
 # Create Aliases
 RUN echo "alias k=kubectl" > /root/.profile
