@@ -1,15 +1,16 @@
-apiVersion: projectcontour.io/v1
-kind: HTTPProxy
-metadata:
-  labels:
-    app: harbor
-  name: harbor-http-proxy
-  namespace: harbor
-spec:
-  routes:
-  - match: /
-    services:
-    - name: harbor-harbor-core
-      port: 80
-  virtualhost:
-    fqdn: harbor.tanzudemo.mytiles.me
+# Not using for TLS as cert-manager doesnt recognize contour httpproxy objects yet https://projectcontour.io/guides/cert-manager/
+#apiVersion: projectcontour.io/v1
+#kind: HTTPProxy
+#metadata:
+#  labels:
+#    app: harbor
+#  name: harbor-http-proxy
+#  namespace: harbor
+#spec:
+#  routes:
+#  - match: /
+#    services:
+#    - name: harbor-harbor-core
+#      port: 80
+#  virtualhost:
+#    fqdn: harbor.tanzudemo.mytiles.me

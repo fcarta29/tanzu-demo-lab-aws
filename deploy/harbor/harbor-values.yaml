@@ -201,7 +201,7 @@ persistence:
       storageClass: ""
       subPath: ""
       accessMode: ReadWriteOnce
-      size: 5Gi
+      size: 20Gi
     chartmuseum:
       existingClaim: ""
       storageClass: ""
@@ -213,7 +213,7 @@ persistence:
       storageClass: ""
       subPath: ""
       accessMode: ReadWriteOnce
-      size: 1Gi
+      size: 2Gi
     # If external database is used, the following settings for database will
     # be ignored
     database:
