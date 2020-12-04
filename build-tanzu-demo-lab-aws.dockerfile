@@ -6,16 +6,12 @@ ENV ARGOCD_CLI_VERSION=v1.7.7
 ENV KPACK_VERSION=0.1.3
 ENV TBS_VERSION=1.0.3
 ENV TBS_DESCRIPTOR_VERSION=100.0.34
+ENV ISTIO_VERSION=1.7.4
 
 # Install System libraries
 RUN echo "Installing System Libraries" \
   && apt-get update \
   && apt-get install -y build-essential python3.6 python3-pip python3-dev bash-completion git curl unzip wget findutils jq vim tree docker.io
-
-# Copy install yamls
-RUN echo "Clone example application repo and copy deploment yaml files" \
-  && git clone https://github.com/fcarta29/tanzu-demo-lab-aws-examples.git examples
-COPY deploy deploy
 
 # Install TMC CLI
 COPY bin/tmc .
@@ -47,8 +43,8 @@ RUN echo "ArgoCD CLI" \
   && curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/$ARGOCD_CLI_VERSION/argocd-linux-amd64 \
   && chmod +x /usr/local/bin/argocd
 
-RUN echo "Get latest ArgoCD install yaml" \
-  && curl -sSL -o /deploy/argocd/argo-install.yaml https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+#RUN echo "Get latest ArgoCD install yaml" \
+#  && curl -sSL -o /deploy/argocd/argo-install.yaml https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 # Install Helm3
 RUN echo "Installing Helm3" \
@@ -59,17 +55,8 @@ RUN echo "Installing Helm3" \
   && helm version
 
 #Install Tanzu Build Service
-COPY /deploy/tbs/build-service-${TBS_VERSION}.tar /tmp
-COPY /deploy/tbs/descriptor-${TBS_DESCRIPTOR_VERSION}.yaml /tmp
-
-# Get kpack install yaml install and log utility
-# RUN echo "Getting kpack installation yaml and installing kpack log utility" \
-RUN echo "Installing kpack log utility" \
-#  && curl -sSL -o /deploy/kpack/release-${KPACK_VERSION}.yaml https://github.com/pivotal/kpack/releases/download/v${KPACK_VERSION}/release-${KPACK_VERSION}.yaml \
-  && curl -sSL -o /deploy/kpack/logs-v${KPACK_VERSION}-linux.tgz https://github.com/pivotal/kpack/releases/download/v${KPACK_VERSION}/logs-v${KPACK_VERSION}-linux.tgz \
-  && tar -zxvf /deploy/kpack/logs-v${KPACK_VERSION}-linux.tgz \
-  && mv logs /usr/local/bin/logs \
-  && chmod +x /usr/local/bin/logs
+#COPY /deploy/tbs/build-service-${TBS_VERSION}.tar /tmp
+#COPY /deploy/tbs/descriptor-${TBS_DESCRIPTOR_VERSION}.yaml /tmp
 
 # Install KPACK CLI
 COPY bin/kp-linux-${KPACK_VERSION} .
@@ -78,6 +65,14 @@ RUN echo "Installing kpack CLI" \
   && mv kp-linux-${KPACK_VERSION} /usr/local/bin/kp \
   && which kp \
   && kp version
+
+# Get kpack install yaml install and log utility
+RUN echo "Installing kpack log utility" \
+  && mkdir /opt/kpack \
+  && curl -sSL -o /opt/kpack/logs-v${KPACK_VERSION}-linux.tgz https://github.com/pivotal/kpack/releases/download/v${KPACK_VERSION}/logs-v${KPACK_VERSION}-linux.tgz \
+  && tar -zxvf /opt/kpack/logs-v${KPACK_VERSION}-linux.tgz \
+  && mv logs /usr/local/bin/logs \
+  && chmod +x /usr/local/bin/logs
 
 # Install Carvel tools
 RUN echo "Installing K14s Carvel tools" \
@@ -88,13 +83,15 @@ RUN echo "Installing K14s Carvel tools" \
 #  && pip3 install -r /deploy/jupyter/requirements.txt \
 #  && pip3 install jupyter
 
+# Install Istioctl
+RUN echo "Installing Istioctl" \
+  && curl -L https://istio.io/downloadIstio | ISTIO_VERSION=${ISTIO_VERSION} TARGET_ARCH=x86_64 sh - \
+  && cd istio-${ISTIO_VERSION} \
+  && export PATH=$PWD/bin:$PATH \
+  && istioctl version
+
 # Create Aliases
 RUN echo "alias k=kubectl" > /root/.profile
-
-# Copy Credentials
-RUN echo "Copying K8s Credentials" \
-    && mkdir /root/.kube
-COPY config/kube.conf /root/.kube/config
 
 # Leave Container Running for SSH Access - SHOULD REMOVE
 ENTRYPOINT ["tail", "-f", "/dev/null"]

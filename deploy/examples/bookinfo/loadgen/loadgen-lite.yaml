@@ -1,0 +1,26 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: product-page-load-lite
+  namespace: loadgen
+spec:
+  ttlSecondsAfterFinished: 0
+  template:
+    metadata:
+      labels:
+        app: product-page-load-lite
+        version: v1
+    spec:
+      containers:
+      - name: product-page-load-lite
+        image: williamyeh/wrk
+        command:
+          - wrk
+        args: ["-t 5", "-c 10", "-d 2h", "http://bookinfo.istio.mytiles.me/productpage"]
+        tty: true
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+      restartPolicy: OnFailure

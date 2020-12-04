@@ -11,7 +11,7 @@ rebuild: clean build
 
 run:
 # Re-enable this when adding jupyter notebooks back in
-	docker run --name build-tanzu-demo-lab-aws -td fcarta29/build-tanzu-demo-lab-aws:latest
+	docker run --name build-tanzu-demo-lab-aws -v $$PWD/deploy:/deploy -v $$PWD/config/kube.conf:/root/.kube/config -td fcarta29/build-tanzu-demo-lab-aws:latest
 	docker exec -it build-tanzu-demo-lab-aws bash -l
 
 #run-jupyter:
