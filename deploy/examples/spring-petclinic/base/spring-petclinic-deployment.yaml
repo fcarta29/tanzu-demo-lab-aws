@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: spring-petclinic
-        image: harbor.tanzudemo.mytiles.me/library/examples/spring-petclinic
+        image: harbor.tanzudemo.frankcarta.com/spring-petclinic/spring-petclinic-application
         imagePullPolicy: Always
         ports:
         - containerPort: 8080

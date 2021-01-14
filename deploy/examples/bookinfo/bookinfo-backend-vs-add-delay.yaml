@@ -1,0 +1,55 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.istio.io/v1beta1","kind":"VirtualService","metadata":{"annotations":{},"creationTimestamp":"2020-12-17T16:15:33Z","generation":6,"labels":{"createdby":"allspark"},"managedFields":[{"apiVersion":"networking.istio.io/v1alpha3","fieldsType":"FieldsV1","fieldsV1":{"f:metadata":{"f:labels":{".":{},"f:createdby":{}}},"f:spec":{".":{},"f:exportTo":{},"f:hosts":{}}},"manager":"k8s-cluster-manager","operation":"Update","time":"2020-12-17T16:15:33Z"},{"apiVersion":"networking.istio.io/v1beta1","fieldsType":"FieldsV1","fieldsV1":{"f:metadata":{"f:annotations":{".":{},"f:kubectl.kubernetes.io/last-applied-configuration":{}}},"f:spec":{"f:http":{}}},"manager":"kubectl","operation":"Update","time":"2020-12-17T17:01:58Z"}],"name":"nsxsm.gns.fcarta-bookinfo-gns.reviews","namespace":"bookinfo","resourceVersion":"149827225","selfLink":"/apis/networking.istio.io/v1beta1/namespaces/bookinfo/virtualservices/nsxsm.gns.fcarta-bookinfo-gns.reviews","uid":"287aa564-f973-4e68-91c5-81d9a6e4eb7d"},"spec":{"exportTo":["."],"hosts":["reviews.tsm.mytiles.me"],"http":[{"fault":{"delay":{"fixedDelay":"3s","percentage":{"value":100}}},"headers":{"request":{"add":{"x-allspark-request-header":"fcarta-aws-dev-a-pr334kr6"}}},"route":[{"destination":{"host":"reviews.tsm.mytiles.me"}}]}]}}
+  creationTimestamp: "2020-12-17T16:15:33Z"
+  generation: 7
+  labels:
+    createdby: allspark
+  managedFields:
+  - apiVersion: networking.istio.io/v1alpha3
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:labels:
+          .: {}
+          f:createdby: {}
+      f:spec:
+        .: {}
+        f:exportTo: {}
+        f:hosts: {}
+    manager: k8s-cluster-manager
+    operation: Update
+    time: "2020-12-17T16:15:33Z"
+  - apiVersion: networking.istio.io/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:kubectl.kubernetes.io/last-applied-configuration: {}
+      f:spec:
+        f:http: {}
+    manager: kubectl
+    operation: Update
+    time: "2020-12-17T17:02:57Z"
+  name: nsxsm.gns.fcarta-bookinfo-gns.reviews
+  namespace: bookinfo
+  resourceVersion: "149827784"
+  selfLink: /apis/networking.istio.io/v1beta1/namespaces/bookinfo/virtualservices/nsxsm.gns.fcarta-bookinfo-gns.reviews
+  uid: 287aa564-f973-4e68-91c5-81d9a6e4eb7d
+spec:
+  exportTo:
+  - .
+  hosts:
+  - reviews.tsm.mytiles.me
+  http:
+  - headers:
+      request:
+        add:
+          x-allspark-request-header: fcarta-aws-dev-a-pr334kr6
+    route:
+    - destination:
+        host: reviews.tsm.mytiles.me

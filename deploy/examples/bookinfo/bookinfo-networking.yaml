@@ -11,7 +11,7 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - "bookinfo.istio.mytiles.me"
+    - "bookinfo.tsm.mytiles.me"
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -19,7 +19,7 @@ metadata:
   name: bookinfo
 spec:
   hosts:
-  - "bookinfo.istio.mytiles.me"
+  - "bookinfo.tsm.mytiles.me"
   gateways:
   - bookinfo-gateway
   http:

@@ -6,5 +6,5 @@ resources:
 commonAnnotations:
   buildTag: jenkins-spring-petclinic-release-69
 images:
-- name: harbor.tanzudemo.mytiles.me/library/examples/spring-petclinic
+- name: harbor.tanzudemo.frankcarta.com/spring-petclinic/spring-petclinic-application
   digest: sha256:ed1c5a78d9773729fcb923530dfa35271dd0857e43718d4fbf8d06ff3cdef998

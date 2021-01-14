@@ -4,14 +4,16 @@ LABEL maintainer="Frank Carta <fcarta@vmware.com>"
 ENV KUBECTL_VERSION=v1.18.0
 ENV ARGOCD_CLI_VERSION=v1.7.7
 ENV KPACK_VERSION=0.1.3
-ENV TBS_VERSION=1.0.3
-ENV TBS_DESCRIPTOR_VERSION=100.0.34
 ENV ISTIO_VERSION=1.7.4
 
 # Install System libraries
 RUN echo "Installing System Libraries" \
   && apt-get update \
-  && apt-get install -y build-essential python3.6 python3-pip python3-dev bash-completion git curl unzip wget findutils jq vim tree docker.io
+  && apt-get install -y build-essential python3.6 python3-pip python3-dev groff bash-completion git curl unzip wget findutils jq vim tree docker.io
+
+# Install AWS CLI
+RUN echo "Installing AWS CLI" \
+  && pip3 install --upgrade awscli
 
 # Install TMC CLI
 COPY bin/tmc .
@@ -37,15 +39,6 @@ RUN echo "Installing Kustomize" \
   && mv kustomize /usr/local/bin/kustomize \
   && kustomize version
 
-# Install ArgoCD CLI
-# ARGOCD_CLI_VERSION=$(curl --silent "https://api.github.com/repos/argoproj/argo-cd/releases/latest" | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
-RUN echo "ArgoCD CLI" \
-  && curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/$ARGOCD_CLI_VERSION/argocd-linux-amd64 \
-  && chmod +x /usr/local/bin/argocd
-
-#RUN echo "Get latest ArgoCD install yaml" \
-#  && curl -sSL -o /deploy/argocd/argo-install.yaml https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-
 # Install Helm3
 RUN echo "Installing Helm3" \
   && curl https://get.helm.sh/helm-v3.3.0-rc.2-linux-amd64.tar.gz --output helm.tar.gz \
@@ -53,10 +46,6 @@ RUN echo "Installing Helm3" \
   && mv linux-amd64/helm /usr/local/bin/helm \
   && chmod +x /usr/local/bin/helm \
   && helm version
-
-#Install Tanzu Build Service
-#COPY /deploy/tbs/build-service-${TBS_VERSION}.tar /tmp
-#COPY /deploy/tbs/descriptor-${TBS_DESCRIPTOR_VERSION}.yaml /tmp
 
 # Install KPACK CLI
 COPY bin/kp-linux-${KPACK_VERSION} .
@@ -78,17 +67,31 @@ RUN echo "Installing kpack log utility" \
 RUN echo "Installing K14s Carvel tools" \
   && wget -O- https://k14s.io/install.sh | bash 
 
-# Install Jupyter - TODO[fcarta] make requirements.txt instead of using empty file
-#RUN echo "Installing Jupyter" \
-#  && pip3 install -r /deploy/jupyter/requirements.txt \
-#  && pip3 install jupyter
-
 # Install Istioctl
 RUN echo "Installing Istioctl" \
   && curl -L https://istio.io/downloadIstio | ISTIO_VERSION=${ISTIO_VERSION} TARGET_ARCH=x86_64 sh - \
   && cd istio-${ISTIO_VERSION} \
-  && export PATH=$PWD/bin:$PATH \
+  && cp $PWD/bin/istioctl /usr/local/bin/istioctl \
   && istioctl version
+
+# Install CF CLI 7
+RUN echo "Installing CF CLI 7" \
+  && wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | apt-key add - \
+  && echo "deb https://packages.cloudfoundry.org/debian stable main" | tee /etc/apt/sources.list.d/cloudfoundry-cli.list \
+  && apt-get update \
+  && apt-get install cf7-cli 
+
+# Install Bosh 
+RUN echo "Installing Bosh" \
+  && wget -q https://github.com/cloudfoundry/bosh-cli/releases/download/v6.4.1/bosh-cli-6.4.1-linux-amd64 \
+  && mv bosh-cli-6.4.1-linux-amd64 bosh \
+  && chmod +x bosh \
+  && mv bosh /usr/local/bin
+
+# Install Jupyter - TODO[fcarta] make requirements.txt instead of using empty file
+#RUN echo "Installing Jupyter" \
+#  && pip3 install -r /deploy/jupyter/requirements.txt \
+#  && pip3 install jupyter
 
 # Create Aliases
 RUN echo "alias k=kubectl" > /root/.profile
@@ -97,3 +100,4 @@ RUN echo "alias k=kubectl" > /root/.profile
 ENTRYPOINT ["tail", "-f", "/dev/null"]
 # Use this if you want to enable/run jupyter notebooks
 #CMD ["jupyter", "notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]
+

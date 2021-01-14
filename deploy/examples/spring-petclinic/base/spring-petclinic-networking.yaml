@@ -12,4 +12,4 @@ spec:
     - name: spring-petclinic
       port: 8080
   virtualhost:
-    fqdn: spring-petclinic.tanzudemo.mytiles.me
+    fqdn: spring-petclinic.tanzudemo.frankcarta.com

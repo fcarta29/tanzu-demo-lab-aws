@@ -8,5 +8,5 @@ resources:
 commonAnnotations:
   buildTag: #@ data.values.buildTag
 images:
-- name: harbor.tanzudemo.mytiles.me/library/examples/spring-petclinic
+- name: harbor.tanzudemo.frankcarta.com/spring-petclinic/spring-petclinic-application
   digest: #@ data.values.digest

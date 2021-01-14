@@ -7,9 +7,10 @@ metadata:
   namespace: jenkins
 spec:
   routes:
-  - match: /
-    services:
+  - services:
     - name: jenkins
       port: 8080
+    conditions:
+    - prefix: /
   virtualhost:
-    fqdn: jenkins.tanzudemo.mytiles.me
+    fqdn: jenkins.tanzudemo.frankcarta.com

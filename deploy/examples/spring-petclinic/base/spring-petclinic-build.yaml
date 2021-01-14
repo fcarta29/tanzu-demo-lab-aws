@@ -18,7 +18,7 @@ metadata:
   namespace: spring-petclinic
 spec:
   serviceAccount: spring-petclinic-service-account
-  tag:  harbor.tanzudemo.mytiles.me/library/examples/spring-petclinic-builder
+  tag:  harbor.tanzudemo.frankcarta.com/spring-petclinic/spring-petclinic-builder
   stack:
     name: full
     kind: ClusterStack
@@ -38,7 +38,7 @@ metadata:
   name: spring-petclinic-image
   namespace: spring-petclinic
 spec:
-  tag:  harbor.tanzudemo.mytiles.me/library/examples/spring-petclinic
+  tag:  harbor.tanzudemo.frankcarta.com/spring-petclinic/spring-petclinic-application
   serviceAccount: spring-petclinic-service-account
   builder:
     name: spring-petclinic-builder

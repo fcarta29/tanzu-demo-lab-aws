@@ -17,7 +17,7 @@ spec:
         image: williamyeh/wrk
         command:
           - wrk
-        args: ["-t 500", "-c 1000", "-d 2h", "http://bookinfo.istio.mytiles.me/productpage"]
+        args: ["-t 500", "-c 1000", "-d 2h", "http://bookinfo.tsm.mytiles.me/productpage"]
         tty: true
         resources:
           requests:
