@@ -11,6 +11,6 @@ spec:
     - name: argocd-server
       port: 443
   virtualhost:
-    fqdn: argocd.tanzudemo.mytiles.me
+    fqdn: argocd.tanzudemo.frankcarta.com
     tls:
       passthrough: true

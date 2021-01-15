@@ -4,6 +4,7 @@ LABEL maintainer="Frank Carta <fcarta@vmware.com>"
 ENV KUBECTL_VERSION=v1.18.0
 ENV ARGOCD_CLI_VERSION=v1.7.7
 ENV KPACK_VERSION=0.1.3
+ENV ARGOCD_VERSION=v1.8.2
 ENV ISTIO_VERSION=1.7.4
 
 # Install System libraries
@@ -73,6 +74,12 @@ RUN echo "Installing Istioctl" \
   && cd istio-${ISTIO_VERSION} \
   && cp $PWD/bin/istioctl /usr/local/bin/istioctl \
   && istioctl version
+
+# Install ArgoCD
+RUN echo "Installing ArgoCD" \
+  && curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/$ARGOCD_VERSION/argocd-linux-amd64 \
+  && chmod +x /usr/local/bin/argocd 
+  #&& argocd version
 
 # Install CF CLI 7
 RUN echo "Installing CF CLI 7" \
