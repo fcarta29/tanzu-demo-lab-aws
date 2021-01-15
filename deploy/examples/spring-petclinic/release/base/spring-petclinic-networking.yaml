@@ -7,9 +7,10 @@ metadata:
   namespace: spring-petclinic
 spec:
   routes:
-  - match: /
-    services:
+  - services:
     - name: spring-petclinic
       port: 8080
+    conditions:
+    - prefix: /
   virtualhost:
     fqdn: spring-petclinic.tanzudemo.frankcarta.com
