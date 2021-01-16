@@ -17,7 +17,7 @@ spec:
         image: williamyeh/wrk
         command:
           - wrk
-        args: ["-t 5", "-c 10", "-d 6h", "http://bookinfo.tsm.mytiles.me/productpage"]
+        args: ["-t 5", "-c 10", "-d 6h", "http://bookinfo.tsm.tanzudemo.frankcarta.com/productpage"]
         tty: true
         resources:
           requests:

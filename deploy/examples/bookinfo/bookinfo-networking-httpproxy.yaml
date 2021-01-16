@@ -1,0 +1,39 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  labels:
+    app: bookinfo
+  name: bookinfo-http-proxy
+  namespace: bookinfo
+spec:
+  routes:
+  - conditions:
+    - prefix: /productpage
+    services:
+    - name: productpage
+      port: 9080
+  - conditions:
+    - prefix: /static
+    services:
+    - name: productpage
+      port: 9080
+  - conditions:
+    - prefix: /login
+    services:
+    - name: productpage
+      port: 9080
+  - conditions:
+    - prefix: /logout
+    services:
+    - name: productpage
+      port: 9080
+  - conditions:
+    - prefix: /api/v1/products
+    services:
+    - name: productpage
+      port: 9080
+  - services:
+    - name: productpage
+      port: 9080      
+  virtualhost:
+    fqdn: bookinfo.tanzudemo.frankcarta.com
