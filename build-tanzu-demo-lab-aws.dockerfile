@@ -95,6 +95,11 @@ RUN echo "Installing Bosh" \
   && chmod +x bosh \
   && mv bosh /usr/local/bin
 
+# Install Bitnami Sealed Secrets
+RUN echo "Installing Bitnami Sealed Secrets" \
+  && wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.15.0/kubeseal-linux-amd64 -O kubeseal \
+  && install -m 755 kubeseal /usr/local/bin/kubeseal
+
 # Install Jupyter - TODO[fcarta] make requirements.txt instead of using empty file
 #RUN echo "Installing Jupyter" \
 #  && pip3 install -r /deploy/jupyter/requirements.txt \
