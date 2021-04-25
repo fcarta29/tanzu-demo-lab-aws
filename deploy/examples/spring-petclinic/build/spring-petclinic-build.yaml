@@ -46,5 +46,5 @@ spec:
   source:
     git:
       url: https://github.com/fcarta29/tanzu-demo-lab-aws-examples.git
-      revision: master
+      revision: spring-petclinic-demo
     subPath: "spring-petclinic"

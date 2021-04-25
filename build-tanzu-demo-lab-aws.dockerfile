@@ -6,11 +6,20 @@ ENV ARGOCD_CLI_VERSION=v1.7.7
 ENV KPACK_VERSION=0.1.3
 ENV ARGOCD_VERSION=v1.8.2
 ENV ISTIO_VERSION=1.7.4
+ENV VELERO_VERSION=v1.5.4
+ENV BAT_VERSION=0.18.0
 
 # Install System libraries
 RUN echo "Installing System Libraries" \
   && apt-get update \
-  && apt-get install -y build-essential python3.6 python3-pip python3-dev groff bash-completion git curl unzip wget findutils jq vim tree docker.io
+  && apt-get install -y build-essential python3.6 python3-pip python3-dev groff bash-completion git curl unzip wget findutils jq vim tree docker.io pv
+
+# Install Bat CLI
+COPY bin/bat-v${BAT_VERSION}-x86_64-unknown-linux-gnu.tar.gz .
+RUN echo "Installing Bat" \
+  && tar -zxvf bat-v${BAT_VERSION}-x86_64-unknown-linux-gnu.tar.gz \
+  && mv bat-v${BAT_VERSION}-x86_64-unknown-linux-gnu/bat /usr/local/bin \
+  && chmod +x /usr/local/bin/bat
 
 # Install AWS CLI
 RUN echo "Installing AWS CLI" \
@@ -104,6 +113,15 @@ RUN echo "Installing Bitnami Sealed Secrets" \
 #RUN echo "Installing Jupyter" \
 #  && pip3 install -r /deploy/jupyter/requirements.txt \
 #  && pip3 install jupyter
+
+# Install Velero CLI
+COPY bin/velero-${VELERO_VERSION}-linux-amd64.tar.gz .
+RUN echo "Installing Velero" \
+  #  Download does a redirect and doesnt complete that actual cli download so commenting out for now - just including bin for now
+  #  && curl https://github.com/vmware-tanzu/velero/releases/download/${VELERO_VERSION}/velero-${VELERO_VERSION}-linux-amd64.tar.gz --output velero.tar.gz \
+  && tar -zxvf velero-${VELERO_VERSION}-linux-amd64.tar.gz \
+  && mv velero-${VELERO_VERSION}-linux-amd64/velero /usr/local/bin/velero \
+  && chmod +x /usr/local/bin/velero
 
 # Create Aliases
 RUN echo "alias k=kubectl" > /root/.profile
