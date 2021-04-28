@@ -4,7 +4,7 @@ namespace: spring-petclinic
 resources:
 - ../../base
 commonAnnotations:
-  buildTag: jenkins-spring-petclinic-release-1685
+  buildTag: jenkins-spring-petclinic-release-1686
 images:
 - name: harbor.tanzudemo.frankcarta.com/spring-petclinic/spring-petclinic-application
-  digest: sha256:35c5a2c4c6a63f44c236dbbe4cb7e63ea88fd526ff8a193c2255f8251f082d5c
+  digest: sha256:8960414c99854eecc8b7b43b15d029f6436403749ce8248d0e4b6a9241e74e11
